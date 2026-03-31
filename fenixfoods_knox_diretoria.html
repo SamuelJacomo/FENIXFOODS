@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fenix Foods — Análise Técnica: Samsung Knox Manage</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8CC80;
+    --dark: #0E0E0E;
+    --dark2: #161616;
+    --dark3: #1E1E1E;
+    --dark4: #252525;
+    --border: rgba(201,168,76,0.2);
+    --text: #F0EDE4;
+    --muted: #8A8478;
+    --green: #4CAF78;
+    --green-bg: rgba(76,175,120,0.08);
+    --green-border: rgba(76,175,120,0.25);
+    --red: #E05555;
+    --red-bg: rgba(224,85,85,0.08);
+    --red-border: rgba(224,85,85,0.25);
+    --amber: #E8A030;
+    --amber-bg: rgba(232,160,48,0.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height:100vh; }
+
+  /* HEADER */
+  .header {
+    background: var(--dark2);
+    border-bottom: 1px solid var(--border);
+    padding: 40px 60px 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content:'';
+    position:absolute;
+    top:-60px; right:-60px;
+    width:300px; height:300px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .header-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 900;
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .header h1 span { color: var(--gold); }
+  .header-sub {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+  .header-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .meta-val { font-size: 14px; font-weight: 500; color: var(--text); }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    background: var(--dark2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 60px;
+    gap: 0;
+  }
+  .tab {
+    padding: 14px 28px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { display: none; padding: 48px 60px; max-width: 1100px; }
+  .content.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 6px;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .section-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 36px;
+    max-width: 680px;
+  }
+
+  /* COST BANNER */
+  .cost-banner {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+  .cost-item { display: flex; flex-direction: column; gap: 4px; }
+  .cost-item + .cost-item { border-left: 1px solid var(--border); padding-left: 24px; }
+  .cost-num { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--gold); font-weight: 700; }
+  .cost-lbl { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* ARGUMENT CARDS */
+  .args-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+  .arg-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .arg-card:hover { border-color: var(--gold); }
+  .arg-card.pro { border-left: 3px solid var(--green); }
+  .arg-card.con { border-left: 3px solid var(--red); }
+  .arg-card .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    color: rgba(201,168,76,0.07);
+    position: absolute;
+    top: 8px; right: 16px;
+    line-height: 1;
+  }
+  .arg-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .arg-tag.pro { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+  .arg-tag.con { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+  .arg-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 8px; line-height: 1.3; }
+  .arg-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .arg-card p b { color: var(--text); font-weight: 500; }
+
+  /* VERDICT BOX */
+  .verdict {
+    background: linear-gradient(135deg, rgba(201,168,76,0.06) 0%, rgba(201,168,76,0.02) 100%);
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 28px 32px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    margin-bottom: 36px;
+  }
+  .verdict-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+  }
+  .verdict h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .verdict p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .verdict p b { color: var(--text); font-weight: 500; }
+
+  /* OPTIONS TABLE */
+  .options-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 36px; }
+  .option-card {
+    background: var(--dark3);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .option-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .option-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .option-header h3 { font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+  .option-header .price { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--gold); }
+  .option-body { padding: 20px 24px; }
+  .option-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+    font-size: 13px;
+  }
+  .option-row:last-child { margin-bottom: 0; }
+  .dot-green { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink:0; margin-top: 5px; }
+  .dot-red { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink:0; margin-top: 5px; }
+  .option-row span { color: var(--muted); line-height: 1.5; }
+  .option-row span b { color: var(--text); font-weight: 500; }
+
+  .rec-badge {
+    background: var(--green-bg);
+    border: 1px solid var(--green-border);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+  .warn-badge {
+    background: var(--amber-bg);
+    border: 1px solid rgba(232,160,48,0.3);
+    color: var(--amber);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-top: 6px;
+  }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; margin-bottom: 36px; }
+  .timeline::before {
+    content:'';
+    position:absolute;
+    left: 8px; top:8px; bottom:8px;
+    width: 1px;
+    background: var(--border);
+  }
+  .tl-item { position: relative; margin-bottom: 28px; }
+  .tl-dot {
+    position: absolute;
+    left: -28px; top: 4px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--dark);
+    border: 2px solid var(--gold);
+  }
+  .tl-period {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .tl-title { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .tl-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+  .tl-desc b { color: var(--text); font-weight: 500; }
+
+  /* ROI TABLE */
+  .roi-table { width: 100%; border-collapse: collapse; margin-bottom: 36px; font-size: 13px; }
+  .roi-table th {
+    text-align: left;
+    padding: 10px 16px;
+    background: var(--dark4);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .roi-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    color: var(--muted);
+    line-height: 1.5;
+    vertical-align: top;
+  }
+  .roi-table td:first-child { color: var(--text); font-weight: 500; }
+  .roi-table td.highlight { color: var(--green); font-weight: 500; }
+  .roi-table tr:last-child td { border-bottom: none; }
+
+  /* ALERT */
+  .alert-box {
+    background: rgba(232,160,48,0.06);
+    border: 1px solid rgba(232,160,48,0.25);
+    border-radius: 10px;
+    padding: 18px 22px;
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+  .alert-box b { color: var(--amber); font-weight: 500; }
+
+  /* FOOTER */
+  .doc-footer {
+    padding: 24px 60px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .doc-footer b { color: var(--gold); }
+
+  @media (max-width: 768px) {
+    .header, .tabs, .content, .doc-footer { padding-left: 20px; padding-right: 20px; }
+    .cost-banner { grid-template-columns: 1fr 1fr; }
+    .args-grid, .options-wrap { grid-template-columns: 1fr; }
+    .header h1 { font-size: 26px; }
+    .tabs { overflow-x: auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-label">Análise Técnica Executiva — Confidencial</div>
+  <h1>Samsung <span>Knox Manage</span><br>Fenix Foods</h1>
+  <div class="header-sub">Elaborado pelo Departamento de TI · Março 2026 · Contrato SMBZ187-2025</div>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Fornecedor</span><span class="meta-val">SmartBiz / Samsung Knox</span></div>
+    <div class="meta-item"><span class="meta-label">Dispositivos</span><span class="meta-val">100 unidades Samsung</span></div>
+    <div class="meta-item"><span class="meta-label">Custo mensal</span><span class="meta-val">R$ 2.290,00</span></div>
+    <div class="meta-item"><span class="meta-label">Vigência</span><span class="meta-val">12 meses · renovação automática</span></div>
+    <div class="meta-item"><span class="meta-label">Status</span><span class="meta-val" style="color:var(--amber)">Aguardando aprovação diretoria</span></div>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('pros')">✦ Por que contratar</button>
+  <button class="tab" onclick="showTab('contras')">Por que não contratar</button>
+  <button class="tab" onclick="showTab('opcoes')">Opções: curto e longo prazo</button>
+  <button class="tab" onclick="showTab('roi')">Impacto operacional</button>
+</div>
+
+<!-- TAB 1: PROS -->
+<div class="content active" id="tab-pros">
+  <div class="section-eyebrow">Argumento técnico para aprovação</div>
+  <div class="section-title">Razões para contratar o Knox</div>
+  <div class="section-desc">A seguir, os argumentos técnicos e operacionais que justificam o investimento. Traduzidos para linguagem executiva, sem jargão desnecessário.</div>
+
+  <div class="cost-banner">
+    <div class="cost-item">
+      <div class="cost-num">R$ 22,90</div>
+      <div class="cost-lbl">por motorista/mês<br>custo total do controle</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-num">R$ 2.290</div>
+      <div class="cost-lbl">investimento mensal<br>100 dispositivos</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-num">R$ 27.480</div>
+      <div class="cost-lbl">investimento anual<br>implementação isenta</div>
+    </div>
+    <div class="cost-item">
+      <div class="cost-num">30 dias</div>
+      <div class="cost-lbl">para sair do contrato<br>sem multa de cancelamento</div>
+    </div>
+  </div>
+
+  <div class="args-grid">
+    <div class="arg-card pro">
+      <div class="num">01</div>
+      <span class="arg-tag pro">Operação</span>
+      <h3>Saber onde cada motorista está, em tempo real</h3>
+      <p>Hoje, para saber onde um motorista está, alguém precisa ligar. Com o Knox, o gestor de logística abre uma tela e vê <b>todos os 100 dispositivos no mapa, ao vivo</b>. Histórico de rotas disponível para qualquer dia anterior. Isso elimina chamadas desnecessárias e resolve disputas de entrega em segundos.</p>
+    </div>
+    <div class="arg-card pro">
+      <div class="num">02</div>
+      <span class="arg-tag pro">Segurança do patrimônio</span>
+      <h3>Celular perdido ou roubado: bloqueado em 30 segundos</h3>
+      <p>Um motorista perde o celular da empresa com dados de clientes, rotas e acesso a aplicativos internos. Com o Knox, o TI <b>bloqueia o aparelho remotamente, apaga os dados e trava a tela</b> antes que qualquer informação seja acessada. Sem Knox, esse celular fica vulnerável indefinidamente.</p>
+    </div>
+    <div class="arg-card pro">
+      <div class="num">03</div>
+      <span class="arg-tag pro">Produtividade</span>
+      <h3>O motorista usa só o que precisa para trabalhar</h3>
+      <p>O Knox permite que o TI <b>libere apenas os apps necessários</b> (rota, comunicação, checklist) e bloqueie redes sociais, jogos e qualquer app fora do escopo. Isso reduz distrações ao volante e garante que o celular da empresa seja usado para trabalho, não lazer.</p>
+    </div>
+    <div class="arg-card pro">
+      <div class="num">04</div>
+      <span class="arg-tag pro">Controle</span>
+      <h3>Gestão de 100 aparelhos de um único painel</h3>
+      <p>Atualizar um app em 100 celulares hoje exige recolher cada aparelho fisicamente ou mandar instruções e torcer que todos façam. Com o Knox, o TI <b>envia a atualização para todos simultaneamente</b>, configura políticas, restringe funcionalidades — tudo remotamente, sem tocar nos aparelhos.</p>
+    </div>
+    <div class="arg-card pro">
+      <div class="num">05</div>
+      <span class="arg-tag pro">Compliance · LGPD</span>
+      <h3>Proteção de dados de clientes conforme a lei</h3>
+      <p>A LGPD exige que a empresa proteja dados pessoais de clientes que transitam em sistemas e dispositivos. Se um celular com dados de clientes for extraviado sem proteção, a Fenix Foods pode responder legalmente. O Knox garante <b>rastreabilidade, criptografia e bloqueio remoto</b> — documentação de compliance real.</p>
+    </div>
+    <div class="arg-card pro">
+      <div class="num">06</div>
+      <span class="arg-tag pro">Custo-benefício</span>
+      <h3>R$ 22,90 por motorista: menor que qualquer alternativa equivalente</h3>
+      <p>Soluções MDM concorrentes (Microsoft Intune, VMware Workspace ONE, MobileIron) custam entre US$ 6 e US$ 15 por dispositivo/mês. Como o parque da Fenix Foods é <b>100% Samsung</b>, o Knox entrega mais recursos nativos pelo menor preço possível no mercado. Implementação e carga de dispositivos negociadas como isentas.</p>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="verdict-icon">⚑</div>
+    <div>
+      <h3>Posicionamento do TI para a diretoria</h3>
+      <p>O Knox não é um gasto de TI. É um <b>instrumento de controle operacional</b>: visibilidade de frota, proteção de patrimônio e conformidade legal num único produto. O custo de <b>R$ 22,90 por motorista/mês</b> é menor do que o custo de uma única ocorrência de celular perdido sem proteção, atraso de entrega por falta de rastreamento ou autuação por inadequação à LGPD.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: CONTRAS -->
+<div class="content" id="tab-contras">
+  <div class="section-eyebrow">Análise isenta de risco</div>
+  <div class="section-title">Razões para não contratar (ou ter cautela)</div>
+  <div class="section-desc">Todo bom gestor de TI apresenta os dois lados. Estes são os riscos reais — sem exagero, sem alarmismo. A diretoria deve conhecê-los antes de assinar.</div>
+
+  <div class="args-grid">
+    <div class="arg-card con">
+      <div class="num">01</div>
+      <span class="arg-tag con">Risco financeiro</span>
+      <h3>O preço está atrelado ao dólar</h3>
+      <p>O contrato usa a cotação PTAX de R$ 5,2733 (nov/2025). O dólar hoje está acima disso. Se o câmbio variar mais de <b>10% para cima</b>, o valor mensal será automaticamente revisado para cima. Em cenário de dólar a R$ 6,00+, o custo mensal pode ultrapassar R$ 2.500. Isso precisa estar no orçamento.</p>
+    </div>
+    <div class="arg-card con">
+      <div class="num">02</div>
+      <span class="arg-tag con">Dependência</span>
+      <h3>Funciona só com Samsung — nada além disso</h3>
+      <p>Se amanhã a Fenix Foods decidir comprar celulares Motorola, iPhone ou qualquer outro fabricante, <b>o Knox não funciona nesses aparelhos</b>. A empresa ficaria presa à Samsung enquanto durar o contrato e além. É uma decisão de plataforma de longo prazo, não só de software.</p>
+    </div>
+    <div class="arg-card con">
+      <div class="num">03</div>
+      <span class="arg-tag con">Operacional</span>
+      <h3>Exige alguém de TI para operar e manter</h3>
+      <p>O Knox não se gerencia sozinho. É necessário um profissional de TI que configure perfis, aplique políticas, monitore alertas e responda a incidentes. <b>Se não houver essa pessoa dedicada ou treinada</b>, a ferramenta é subutilizada e o investimento desperdiçado. Isso precisa ser previsto.</p>
+    </div>
+    <div class="arg-card con">
+      <div class="num">04</div>
+      <span class="arg-tag con">Contrato</span>
+      <h3>Proposta com prazo de validade vencido</h3>
+      <p>A proposta do contrato tinha validade até <b>19/11/2025</b>. Já estamos em março de 2026. Embora o fornecedor confirme que os valores seguem válidos, é recomendável obter isso <b>por escrito e com nova assinatura</b> antes de qualquer comprometimento financeiro. Nada verbal em contrato.</p>
+    </div>
+    <div class="arg-card con">
+      <div class="num">05</div>
+      <span class="arg-tag con">Resistência interna</span>
+      <h3>Motoristas podem reagir negativamente ao monitoramento</h3>
+      <p>Monitorar localização e bloquear apps pode gerar atrito com os motoristas se não for comunicado corretamente. <b>Sem uma política interna clara e transparente</b>, a implementação pode criar conflitos trabalhistas ou resistência que prejudique a adesão. A gestão de pessoas precisa ser envolvida antes do rollout.</p>
+    </div>
+    <div class="arg-card con">
+      <div class="num">06</div>
+      <span class="arg-tag con">Estratégico</span>
+      <h3>12 meses de comprometimento sem garantia de resultado</h3>
+      <p>Embora os testes tenham sido positivos, um piloto controlado é diferente de 100 dispositivos em operação real. <b>Problemas de conectividade, integração com sistemas internos ou resistência dos usuários</b> só aparecem em escala. O contrato de 12 meses com renovação automática exige atenção na gestão do aviso de cancelamento se necessário.</p>
+    </div>
+  </div>
+
+  <div class="verdict" style="border-color: var(--red);">
+    <div class="verdict-icon">⚐</div>
+    <div>
+      <h3 style="color:var(--red)">Avaliação técnica dos contras</h3>
+      <p>Nenhum dos riscos acima é bloqueante — todos são <b>gerenciáveis com planejamento adequado</b>. O risco cambial é o único fora do controle da empresa. Os demais dependem de decisões internas: quem opera a ferramenta, como comunicamos aos motoristas e como monitoramos a renovação do contrato. Um contra que supera todos os outros: <b>o custo de não ter nenhuma solução</b> — frota sem controle, celulares sem proteção e LGPD sem cobertura.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: OPÇÕES -->
+<div class="content" id="tab-opcoes">
+  <div class="section-eyebrow">Visão estratégica de TI</div>
+  <div class="section-title">Cenários: curto e longo prazo</div>
+  <div class="section-desc">Como CEO de TI, apresento quatro caminhos possíveis. Cada um com custo, risco e retorno diferentes. A diretoria escolhe com informação completa.</div>
+
+  <div class="options-wrap">
+    <div class="option-card" style="border-top: 3px solid var(--green);">
+      <div class="option-header">
+        <span class="option-badge" style="color:var(--green)">✦ Curto prazo · Recomendado</span>
+        <h3>Contratar Knox agora — 100 dispositivos</h3>
+        <div class="price">R$ 2.290/mês</div>
+        <span class="rec-badge">Recomendação do TI</span>
+      </div>
+      <div class="option-body">
+        <div class="option-row"><div class="dot-green"></div><span><b>Implementação imediata</b> — 0 a 60 dias para frota completa operando com controle total</span></div>
+        <div class="option-row"><div class="dot-green"></div><span><b>GPS + bloqueio + histórico de rotas</b> disponíveis no primeiro mês</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Implementação e KME <b>isentos</b> — economia de R$ 68,70 já garantida</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Saída sem multa com <b>30 dias de aviso</b> — baixo risco de comprometimento</span></div>
+        <div class="option-red"></div>
+        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span>Exposição cambial: <b>dólar sobe = custo sobe</b> acima de 10% de variação</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Exige <b>treinamento do time de TI</b> para operar o painel corretamente</span></div>
+      </div>
+    </div>
+
+    <div class="option-card" style="border-top: 3px solid var(--amber);">
+      <div class="option-header">
+        <span class="option-badge" style="color:var(--amber)">Curto prazo · Alternativo</span>
+        <h3>Piloto com 30–50 dispositivos primeiro</h3>
+        <div class="price">~R$ 687–1.145/mês</div>
+        <span class="warn-badge">Menor risco inicial</span>
+      </div>
+      <div class="option-body">
+        <div class="option-row"><div class="dot-green"></div><span>Começa com as <b>rotas mais críticas</b> — motoristas de maior volume ou maior risco</span></div>
+        <div class="option-row"><div class="dot-green"></div><span><b>Menor comprometimento financeiro</b> para validar operação em escala real</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Tempo para <b>treinar equipe de TI</b> com menor pressão</span></div>
+        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Cobertura parcial</b> — parte da frota permanece sem controle</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Renegociar para 100 devices depois pode ter <b>custo diferente</b></span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Benefícios totais da ferramenta só aparecem <b>com frota completa</b></span></div>
+      </div>
+    </div>
+
+    <div class="option-card" style="border-top: 3px solid var(--red);">
+      <div class="option-header">
+        <span class="option-badge" style="color:var(--red)">Longo prazo · Alternativo</span>
+        <h3>Substituir Knox por solução multiplataforma</h3>
+        <div class="price">~R$ 3.000–6.000/mês</div>
+        <span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Alto custo · Alta complexidade</span>
+      </div>
+      <div class="option-body">
+        <div class="option-row"><div class="dot-green"></div><span>Funciona com <b>qualquer fabricante</b> de celular (Samsung, Motorola, iPhone)</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Elimina dependência da Samsung para hardware</span></div>
+        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Microsoft Intune ou VMware</b> custam até 3x mais por dispositivo</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Implementação e migração: <b>meses de trabalho</b>, custo elevado</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Como a frota atual é 100% Samsung, <b>não há ganho imediato</b> nessa troca</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Faz sentido <b>só se a empresa mudar o parque de celulares</b> no futuro</span></div>
+      </div>
+    </div>
+
+    <div class="option-card" style="border-top: 3px solid var(--muted);">
+      <div class="option-header">
+        <span class="option-badge" style="color:var(--muted)">Longo prazo · Não recomendado</span>
+        <h3>Não contratar nenhuma solução</h3>
+        <div class="price">R$ 0/mês agora</div>
+        <span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Risco operacional e legal alto</span>
+      </div>
+      <div class="option-body">
+        <div class="option-row"><div class="dot-green"></div><span>Sem custo imediato de software</span></div>
+        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Frota sem rastreamento</b> — operação cega, sem dados de entrega em tempo real</span></div>
+        <div class="option-row"><div class="dot-red"></div><span><b>Celulares da empresa desprotegidos</b> — risco de vazamento de dados de clientes</span></div>
+        <div class="option-row"><div class="dot-red"></div><span><b>Exposição à LGPD</b> — multas de até 2% do faturamento anual por incidente</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Gestão manual de 100 aparelhos: <b>inviável em escala</b></span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Custo de uma única multa LGPD <b>supera 12 meses de Knox</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="verdict">
+    <div class="verdict-icon">◈</div>
+    <div>
+      <h3>Recomendação estratégica do TI</h3>
+      <p><b>Contratar Knox para os 100 dispositivos agora</b>, com revisão de desempenho em 6 meses. O custo por dispositivo é o menor disponível para o parque Samsung da Fenix Foods, a implementação está isenta, e a saída sem multa com 30 dias de aviso elimina o risco de comprometimento de longo prazo. O piloto reduzido é uma opção válida mas sub-ótima — a ferramenta entrega seu valor máximo com a frota completa. A não-contratação é a única opção tecnicamente inaceitável dado o cenário atual.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: ROI -->
+<div class="content" id="tab-roi">
+  <div class="section-eyebrow">Impacto na operação Fenix Foods</div>
+  <div class="section-title">O que muda na logística no dia a dia</div>
+  <div class="section-desc">Tradução prática do Knox para as pessoas que mais importam: os gestores de logística e a operação de campo que coordena os motoristas.</div>
+
+  <div class="alert-box">
+    <b>Contexto:</b> A operação da Fenix Foods depende de motoristas que precisam estar acessíveis, rastreáveis e produtivos. Hoje, o controle dessa operação depende de ligações, mensagens manuais e confiança. O Knox automatiza esse controle sem depender de comportamento humano.
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Semana 1–2 · Implementação</div>
+      <div class="tl-title">Configuração do painel e carga dos 100 dispositivos</div>
+      <div class="tl-desc">A SmartBiz carrega os aparelhos via KME (Knox Mobile Enrollment) remotamente. <b>Sem recolher os celulares dos motoristas</b>. O TI configura perfis de uso: quais apps ficam liberados, restrições de horário, e ativa o GPS. Implementação isenta pelo contrato.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Mês 1 · Primeiros resultados</div>
+      <div class="tl-title">Logística vê a frota em tempo real pela primeira vez</div>
+      <div class="tl-desc">Os gestores acessam o painel e visualizam <b>onde cada motorista está agora</b>, qual rota percorreu, há quanto tempo está parado. Ligações para localizar motoristas caem drasticamente. Disputas de entrega são resolvidas com histórico de rota.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Mês 2–3 · Otimização</div>
+      <div class="tl-title">Dados de rota começam a revelar ineficiências</div>
+      <div class="tl-desc">Com histórico acumulado, é possível identificar <b>rotas com tempo excessivo</b>, motoristas com paradas fora do previsto, e horários de pico que impactam entregas. Essas informações alimentam decisões de melhoria de rota e escala de equipe.</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-period">Mês 6 · Revisão</div>
+      <div class="tl-title">TI apresenta relatório de uso e ROI à diretoria</div>
+      <div class="tl-desc">Com 6 meses de dados, o TI apresenta: quantos incidentes de celular foram resolvidos remotamente, economia de tempo da logística, e se a solução deve ser expandida, mantida ou renegociada com a SmartBiz.</div>
+    </div>
+  </div>
+
+  <table class="roi-table">
+    <thead>
+      <tr>
+        <th>Situação</th>
+        <th>Sem Knox (hoje)</th>
+        <th>Com Knox</th>
+        <th>Impacto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Localizar motorista</td>
+        <td>Ligar, aguardar, registrar manualmente</td>
+        <td>Painel GPS em tempo real, sem ligação</td>
+        <td class="highlight">Economia de tempo diária</td>
+      </tr>
+      <tr>
+        <td>Celular perdido/roubado</td>
+        <td>Dados expostos indefinidamente, substituição sem controle</td>
+        <td>Bloqueio remoto em 30 segundos, dados apagados</td>
+        <td class="highlight">Proteção imediata de dados</td>
+      </tr>
+      <tr>
+        <td>Atualizar app em 100 celulares</td>
+        <td>Recolher aparelhos ou confiar que cada um faça</td>
+        <td>Envio remoto simultâneo pelo painel</td>
+        <td class="highlight">100% de conformidade garantida</td>
+      </tr>
+      <tr>
+        <td>Uso indevido do celular</td>
+        <td>Sem controle — redes sociais, jogos, apps externos</td>
+        <td>Apenas apps autorizados ficam visíveis</td>
+        <td class="highlight">Foco e segurança no uso</td>
+      </tr>
+      <tr>
+        <td>Disputa de entrega</td>
+        <td>Palavra do motorista vs. palavra do cliente</td>
+        <td>Histórico de rota com timestamp comprovado</td>
+        <td class="highlight">Evidência objetiva disponível</td>
+      </tr>
+      <tr>
+        <td>Conformidade LGPD</td>
+        <td>Dispositivos sem proteção de dados = risco legal</td>
+        <td>Criptografia + rastreabilidade + bloqueio remoto</td>
+        <td class="highlight">Cobertura legal documentada</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="verdict">
+    <div class="verdict-icon">◆</div>
+    <div>
+      <h3>Conclusão executiva</h3>
+      <p>O Knox resolve um problema que a Fenix Foods já tem hoje — só que de forma invisível: falta de controle sobre a frota de campo. <b>R$ 22,90 por motorista por mês</b> é o custo de ter visibilidade total, proteção do patrimônio e cobertura legal. O retorno não é especulativo — é operacional, e começa no primeiro mês de uso. A recomendação do TI é clara: <b>aprovar o contrato, monitorar o câmbio, e revisar em 6 meses.</b></p>
+    </div>
+  </div>
+</div>
+
+<div class="doc-footer">
+  <span>Fenix Foods · Departamento de TI · Análise Técnica Executiva · <b>Confidencial</b></span>
+  <span>Contrato SMBZ187-2025 · SmartBiz / Samsung Knox · Março 2026</span>
+</div>
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
