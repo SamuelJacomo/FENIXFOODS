@@ -28,10 +28,11 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background: var(--dark); color: var(--text); font-family: 'DM Sans', sans-serif; min-height:100vh; }
 
+  /* HEADER */
   .header {
     background: var(--dark2);
     border-bottom: 1px solid var(--border);
-    padding: 40px 60px 32px;
+    padding: 28px 60px 32px;
     position: relative;
     overflow: hidden;
   }
@@ -43,14 +44,133 @@
     background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
     pointer-events:none;
   }
+
+  /* DECISION BUTTON — TOP RIGHT IN HEADER */
+  .header-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
   .header-label {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 0.2em;
     color: var(--gold);
     text-transform: uppercase;
-    margin-bottom: 12px;
+    padding-top: 4px;
   }
+  .decision-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 10;
+  }
+  .decision-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .decision-ring {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.18s cubic-bezier(.4,0,.2,1);
+    flex-shrink: 0;
+  }
+  .decision-ring:hover { transform: scale(1.07); }
+  .decision-ring:active { transform: scale(0.95); }
+  .decision-ring svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: rotate(-90deg);
+  }
+  .decision-ring svg circle.bg {
+    fill: none;
+    stroke: rgba(201,168,76,0.12);
+    stroke-width: 2.5;
+  }
+  .decision-ring svg circle.arc {
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 0 1000;
+    transition: stroke-dasharray 0.55s cubic-bezier(.4,0,.2,1), stroke 0.35s;
+  }
+  .decision-inner {
+    position: absolute;
+    inset: 10px;
+    border-radius: 50%;
+    background: var(--dark3);
+    border: 1px solid rgba(201,168,76,0.18);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    transition: border-color 0.35s, background 0.35s;
+  }
+  .decision-ico {
+    font-size: 16px;
+    line-height: 1;
+    color: var(--muted);
+    transition: color 0.3s;
+  }
+  .decision-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    transition: color 0.35s;
+  }
+  .decision-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.25);
+    background: rgba(201,168,76,0.07);
+    color: var(--gold);
+    transition: all 0.35s;
+    white-space: nowrap;
+  }
+  .decision-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--gold);
+    flex-shrink: 0;
+    transition: background 0.35s;
+  }
+
+  /* STATE: approved */
+  .state-approved .arc { stroke: var(--green); stroke-dasharray: 283 1000; }
+  .state-approved .decision-inner { border-color: rgba(76,175,120,0.4); background: rgba(76,175,120,0.04); }
+  .state-approved .decision-ico { color: var(--green); }
+  .state-approved .decision-lbl { color: var(--green); }
+  .state-approved .decision-pill { background: rgba(76,175,120,0.08); border-color: rgba(76,175,120,0.3); color: var(--green); }
+  .state-approved .decision-dot { background: var(--green); }
+
+  /* STATE: rejected */
+  .state-rejected .arc { stroke: var(--red); stroke-dasharray: 283 1000; }
+  .state-rejected .decision-inner { border-color: rgba(224,85,85,0.4); background: rgba(224,85,85,0.04); }
+  .state-rejected .decision-ico { color: var(--red); }
+  .state-rejected .decision-lbl { color: var(--red); }
+  .state-rejected .decision-pill { background: rgba(224,85,85,0.08); border-color: rgba(224,85,85,0.3); color: var(--red); }
+  .state-rejected .decision-dot { background: var(--red); }
+
   .header h1 {
     font-family: 'Playfair Display', serif;
     font-size: 38px;
@@ -74,12 +194,12 @@
   .meta-label { font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
   .meta-val { font-size: 14px; font-weight: 500; color: var(--text); }
 
+  /* TABS */
   .tabs {
     display: flex;
     background: var(--dark2);
     border-bottom: 1px solid var(--border);
     padding: 0 60px;
-    gap: 0;
   }
   .tab {
     padding: 14px 28px;
@@ -99,6 +219,7 @@
   .tab:hover { color: var(--text); }
   .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
 
+  /* CONTENT */
   .content { display: none; padding: 48px 60px; max-width: 1100px; }
   .content.active { display: block; }
 
@@ -230,7 +351,6 @@
   .dot-red { width: 6px; height: 6px; border-radius: 50%; background: var(--red); flex-shrink:0; margin-top: 5px; }
   .option-row span { color: var(--muted); line-height: 1.5; }
   .option-row span b { color: var(--text); font-weight: 500; }
-
   .rec-badge {
     background: var(--green-bg);
     border: 1px solid var(--green-border);
@@ -322,131 +442,18 @@
   }
   .alert-box b { color: var(--amber); font-weight: 500; }
 
-  /* FOOTER */
   .doc-footer {
-    padding: 32px 60px 40px;
+    padding: 24px 60px;
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 40px;
-    flex-wrap: wrap;
-  }
-  .footer-info { display: flex; flex-direction: column; gap: 4px; }
-  .footer-info span { font-size: 11px; color: var(--muted); }
-  .footer-info b { color: var(--gold); }
-
-  /* DECISION BUTTON */
-  .decision-wrap {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-  .decision-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .decision-ring {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: transform 0.18s cubic-bezier(.4,0,.2,1);
-    flex-shrink: 0;
-  }
-  .decision-ring:hover { transform: scale(1.07); }
-  .decision-ring:active { transform: scale(0.95); }
-  .decision-ring svg {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    transform: rotate(-90deg);
-  }
-  .decision-ring svg circle.bg {
-    fill: none;
-    stroke: rgba(201,168,76,0.12);
-    stroke-width: 2.5;
-  }
-  .decision-ring svg circle.arc {
-    fill: none;
-    stroke-width: 2.5;
-    stroke-linecap: round;
-    stroke-dasharray: 0 1000;
-    transition: stroke-dasharray 0.55s cubic-bezier(.4,0,.2,1), stroke 0.35s;
-  }
-  .decision-inner {
-    position: absolute;
-    inset: 10px;
-    border-radius: 50%;
-    background: var(--dark2);
-    border: 1px solid rgba(201,168,76,0.18);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2px;
-    transition: border-color 0.35s, background 0.35s;
-  }
-  .decision-ico {
-    font-size: 18px;
-    line-height: 1;
-    color: var(--muted);
-    transition: color 0.3s;
-  }
-  .decision-lbl {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-    transition: color 0.35s;
-  }
-  .decision-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 5px 14px;
-    border-radius: 100px;
     font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    border: 1px solid rgba(201,168,76,0.25);
-    background: rgba(201,168,76,0.07);
-    color: var(--gold);
-    transition: all 0.35s;
-    white-space: nowrap;
+    color: var(--muted);
+    flex-wrap: wrap;
+    gap: 12px;
   }
-  .decision-dot {
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--gold);
-    flex-shrink: 0;
-    transition: background 0.35s;
-  }
-
-  /* STATE: approved */
-  .state-approved .arc { stroke: var(--green); stroke-dasharray: 345 1000; }
-  .state-approved .decision-inner { border-color: rgba(76,175,120,0.4); background: rgba(76,175,120,0.04); }
-  .state-approved .decision-ico { color: var(--green); }
-  .state-approved .decision-lbl { color: var(--green); }
-  .state-approved .decision-pill { background: rgba(76,175,120,0.08); border-color: rgba(76,175,120,0.3); color: var(--green); }
-  .state-approved .decision-dot { background: var(--green); }
-
-  /* STATE: rejected */
-  .state-rejected .arc { stroke: var(--red); stroke-dasharray: 345 1000; }
-  .state-rejected .decision-inner { border-color: rgba(224,85,85,0.4); background: rgba(224,85,85,0.04); }
-  .state-rejected .decision-ico { color: var(--red); }
-  .state-rejected .decision-lbl { color: var(--red); }
-  .state-rejected .decision-pill { background: rgba(224,85,85,0.08); border-color: rgba(224,85,85,0.3); color: var(--red); }
-  .state-rejected .decision-dot { background: var(--red); }
+  .doc-footer b { color: var(--gold); }
 
   @media (max-width: 768px) {
     .header, .tabs, .content, .doc-footer { padding-left: 20px; padding-right: 20px; }
@@ -454,14 +461,35 @@
     .args-grid, .options-wrap { grid-template-columns: 1fr; }
     .header h1 { font-size: 26px; }
     .tabs { overflow-x: auto; }
-    .doc-footer { flex-direction: column; align-items: flex-start; }
+    .header-topbar { flex-direction: column; gap: 16px; }
   }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-label">Análise Técnica Executiva — Confidencial</div>
+  <!-- TOPBAR: label esquerda + botão de decisão direita -->
+  <div class="header-topbar">
+    <div class="header-label">Análise Técnica Executiva — Confidencial</div>
+    <div class="decision-wrap" id="decisionWrap">
+      <div class="decision-label">Decisão da diretoria</div>
+      <div class="decision-ring" id="decisionBtn" onclick="toggleDecision()">
+        <svg viewBox="0 0 100 100">
+          <circle class="bg" cx="50" cy="50" r="45"/>
+          <circle class="arc" id="decisionArc" cx="50" cy="50" r="45"/>
+        </svg>
+        <div class="decision-inner">
+          <div class="decision-ico" id="decisionIco">◈</div>
+          <div class="decision-lbl" id="decisionLbl">Pendente</div>
+        </div>
+      </div>
+      <div class="decision-pill" id="decisionPill">
+        <div class="decision-dot" id="decisionDot"></div>
+        <span id="decisionPillText">Aguardando aprovação</span>
+      </div>
+    </div>
+  </div>
+
   <h1>Samsung <span>Knox Manage</span><br>Fenix Foods</h1>
   <div class="header-sub">Elaborado pelo Departamento de TI · Março 2026 · Contrato SMBZ187-2025</div>
   <div class="header-meta">
@@ -474,10 +502,10 @@
 </div>
 
 <div class="tabs">
-  <button class="tab active" onclick="showTab('pros')">✦ Por que contratar</button>
-  <button class="tab" onclick="showTab('contras')">Por que não contratar</button>
-  <button class="tab" onclick="showTab('opcoes')">Opções: curto e longo prazo</button>
-  <button class="tab" onclick="showTab('roi')">Impacto operacional</button>
+  <button class="tab active" onclick="showTab('pros', this)">✦ Por que contratar</button>
+  <button class="tab" onclick="showTab('contras', this)">Por que não contratar</button>
+  <button class="tab" onclick="showTab('opcoes', this)">Opções: curto e longo prazo</button>
+  <button class="tab" onclick="showTab('roi', this)">Impacto operacional</button>
 </div>
 
 <!-- TAB 1: PROS -->
@@ -485,72 +513,21 @@
   <div class="section-eyebrow">Argumento técnico para aprovação</div>
   <div class="section-title">Razões para contratar o Knox</div>
   <div class="section-desc">A seguir, os argumentos técnicos e operacionais que justificam o investimento. Traduzidos para linguagem executiva, sem jargão desnecessário.</div>
-
   <div class="cost-banner">
-    <div class="cost-item">
-      <div class="cost-num">R$ 22,90</div>
-      <div class="cost-lbl">por motorista/mês<br>custo total do controle</div>
-    </div>
-    <div class="cost-item">
-      <div class="cost-num">R$ 2.290</div>
-      <div class="cost-lbl">investimento mensal<br>100 dispositivos</div>
-    </div>
-    <div class="cost-item">
-      <div class="cost-num">R$ 27.480</div>
-      <div class="cost-lbl">investimento anual<br>implementação isenta</div>
-    </div>
-    <div class="cost-item">
-      <div class="cost-num">30 dias</div>
-      <div class="cost-lbl">para sair do contrato<br>sem multa de cancelamento</div>
-    </div>
+    <div class="cost-item"><div class="cost-num">R$ 22,90</div><div class="cost-lbl">por motorista/mês<br>custo total do controle</div></div>
+    <div class="cost-item"><div class="cost-num">R$ 2.290</div><div class="cost-lbl">investimento mensal<br>100 dispositivos</div></div>
+    <div class="cost-item"><div class="cost-num">R$ 27.480</div><div class="cost-lbl">investimento anual<br>implementação isenta</div></div>
+    <div class="cost-item"><div class="cost-num">30 dias</div><div class="cost-lbl">para sair do contrato<br>sem multa de cancelamento</div></div>
   </div>
-
   <div class="args-grid">
-    <div class="arg-card pro">
-      <div class="num">01</div>
-      <span class="arg-tag pro">Operação</span>
-      <h3>Saber onde cada motorista está, em tempo real</h3>
-      <p>Hoje, para saber onde um motorista está, alguém precisa ligar. Com o Knox, o gestor de logística abre uma tela e vê <b>todos os 100 dispositivos no mapa, ao vivo</b>. Histórico de rotas disponível para qualquer dia anterior. Isso elimina chamadas desnecessárias e resolve disputas de entrega em segundos.</p>
-    </div>
-    <div class="arg-card pro">
-      <div class="num">02</div>
-      <span class="arg-tag pro">Segurança do patrimônio</span>
-      <h3>Celular perdido ou roubado: bloqueado em 30 segundos</h3>
-      <p>Um motorista perde o celular da empresa com dados de clientes, rotas e acesso a aplicativos internos. Com o Knox, o TI <b>bloqueia o aparelho remotamente, apaga os dados e trava a tela</b> antes que qualquer informação seja acessada. Sem Knox, esse celular fica vulnerável indefinidamente.</p>
-    </div>
-    <div class="arg-card pro">
-      <div class="num">03</div>
-      <span class="arg-tag pro">Produtividade</span>
-      <h3>O motorista usa só o que precisa para trabalhar</h3>
-      <p>O Knox permite que o TI <b>libere apenas os apps necessários</b> (rota, comunicação, checklist) e bloqueie redes sociais, jogos e qualquer app fora do escopo. Isso reduz distrações ao volante e garante que o celular da empresa seja usado para trabalho, não lazer.</p>
-    </div>
-    <div class="arg-card pro">
-      <div class="num">04</div>
-      <span class="arg-tag pro">Controle</span>
-      <h3>Gestão de 100 aparelhos de um único painel</h3>
-      <p>Atualizar um app em 100 celulares hoje exige recolher cada aparelho fisicamente ou mandar instruções e torcer que todos façam. Com o Knox, o TI <b>envia a atualização para todos simultaneamente</b>, configura políticas, restringe funcionalidades — tudo remotamente, sem tocar nos aparelhos.</p>
-    </div>
-    <div class="arg-card pro">
-      <div class="num">05</div>
-      <span class="arg-tag pro">Compliance · LGPD</span>
-      <h3>Proteção de dados de clientes conforme a lei</h3>
-      <p>A LGPD exige que a empresa proteja dados pessoais de clientes que transitam em sistemas e dispositivos. Se um celular com dados de clientes for extraviado sem proteção, a Fenix Foods pode responder legalmente. O Knox garante <b>rastreabilidade, criptografia e bloqueio remoto</b> — documentação de compliance real.</p>
-    </div>
-    <div class="arg-card pro">
-      <div class="num">06</div>
-      <span class="arg-tag pro">Custo-benefício</span>
-      <h3>R$ 22,90 por motorista: menor que qualquer alternativa equivalente</h3>
-      <p>Soluções MDM concorrentes (Microsoft Intune, VMware Workspace ONE, MobileIron) custam entre US$ 6 e US$ 15 por dispositivo/mês. Como o parque da Fenix Foods é <b>100% Samsung</b>, o Knox entrega mais recursos nativos pelo menor preço possível no mercado. Implementação e carga de dispositivos negociadas como isentas.</p>
-    </div>
+    <div class="arg-card pro"><div class="num">01</div><span class="arg-tag pro">Operação</span><h3>Saber onde cada motorista está, em tempo real</h3><p>Hoje, para saber onde um motorista está, alguém precisa ligar. Com o Knox, o gestor de logística abre uma tela e vê <b>todos os 100 dispositivos no mapa, ao vivo</b>. Histórico de rotas disponível para qualquer dia anterior. Isso elimina chamadas desnecessárias e resolve disputas de entrega em segundos.</p></div>
+    <div class="arg-card pro"><div class="num">02</div><span class="arg-tag pro">Segurança do patrimônio</span><h3>Celular perdido ou roubado: bloqueado em 30 segundos</h3><p>Um motorista perde o celular da empresa com dados de clientes, rotas e acesso a aplicativos internos. Com o Knox, o TI <b>bloqueia o aparelho remotamente, apaga os dados e trava a tela</b> antes que qualquer informação seja acessada. Sem Knox, esse celular fica vulnerável indefinidamente.</p></div>
+    <div class="arg-card pro"><div class="num">03</div><span class="arg-tag pro">Produtividade</span><h3>O motorista usa só o que precisa para trabalhar</h3><p>O Knox permite que o TI <b>libere apenas os apps necessários</b> (rota, comunicação, checklist) e bloqueie redes sociais, jogos e qualquer app fora do escopo. Isso reduz distrações ao volante e garante que o celular da empresa seja usado para trabalho, não lazer.</p></div>
+    <div class="arg-card pro"><div class="num">04</div><span class="arg-tag pro">Controle</span><h3>Gestão de 100 aparelhos de um único painel</h3><p>Atualizar um app em 100 celulares hoje exige recolher cada aparelho fisicamente ou mandar instruções e torcer que todos façam. Com o Knox, o TI <b>envia a atualização para todos simultaneamente</b>, configura políticas, restringe funcionalidades — tudo remotamente, sem tocar nos aparelhos.</p></div>
+    <div class="arg-card pro"><div class="num">05</div><span class="arg-tag pro">Compliance · LGPD</span><h3>Proteção de dados de clientes conforme a lei</h3><p>A LGPD exige que a empresa proteja dados pessoais de clientes que transitam em sistemas e dispositivos. Se um celular com dados de clientes for extraviado sem proteção, a Fenix Foods pode responder legalmente. O Knox garante <b>rastreabilidade, criptografia e bloqueio remoto</b> — documentação de compliance real.</p></div>
+    <div class="arg-card pro"><div class="num">06</div><span class="arg-tag pro">Custo-benefício</span><h3>R$ 22,90 por motorista: menor que qualquer alternativa equivalente</h3><p>Soluções MDM concorrentes (Microsoft Intune, VMware Workspace ONE, MobileIron) custam entre US$ 6 e US$ 15 por dispositivo/mês. Como o parque da Fenix Foods é <b>100% Samsung</b>, o Knox entrega mais recursos nativos pelo menor preço possível no mercado. Implementação e carga de dispositivos negociadas como isentas.</p></div>
   </div>
-
-  <div class="verdict">
-    <div class="verdict-icon">⚑</div>
-    <div>
-      <h3>Posicionamento do TI para a diretoria</h3>
-      <p>O Knox não é um gasto de TI. É um <b>instrumento de controle operacional</b>: visibilidade de frota, proteção de patrimônio e conformidade legal num único produto. O custo de <b>R$ 22,90 por motorista/mês</b> é menor do que o custo de uma única ocorrência de celular perdido sem proteção, atraso de entrega por falta de rastreamento ou autuação por inadequação à LGPD.</p>
-    </div>
-  </div>
+  <div class="verdict"><div class="verdict-icon">⚑</div><div><h3>Posicionamento do TI para a diretoria</h3><p>O Knox não é um gasto de TI. É um <b>instrumento de controle operacional</b>: visibilidade de frota, proteção de patrimônio e conformidade legal num único produto. O custo de <b>R$ 22,90 por motorista/mês</b> é menor do que o custo de uma única ocorrência de celular perdido sem proteção, atraso de entrega por falta de rastreamento ou autuação por inadequação à LGPD.</p></div></div>
 </div>
 
 <!-- TAB 2: CONTRAS -->
@@ -558,289 +535,123 @@
   <div class="section-eyebrow">Análise isenta de risco</div>
   <div class="section-title">Razões para não contratar (ou ter cautela)</div>
   <div class="section-desc">Todo bom gestor de TI apresenta os dois lados. Estes são os riscos reais — sem exagero, sem alarmismo. A diretoria deve conhecê-los antes de assinar.</div>
-
   <div class="args-grid">
-    <div class="arg-card con">
-      <div class="num">01</div>
-      <span class="arg-tag con">Risco financeiro</span>
-      <h3>O preço está atrelado ao dólar</h3>
-      <p>O contrato usa a cotação PTAX de R$ 5,2733 (nov/2025). O dólar hoje está acima disso. Se o câmbio variar mais de <b>10% para cima</b>, o valor mensal será automaticamente revisado para cima. Em cenário de dólar a R$ 6,00+, o custo mensal pode ultrapassar R$ 2.500. Isso precisa estar no orçamento.</p>
-    </div>
-    <div class="arg-card con">
-      <div class="num">02</div>
-      <span class="arg-tag con">Dependência</span>
-      <h3>Funciona só com Samsung? Nao, mas tem melhor desempenho com os aparelhos da marca</h3>
-      <p>Se amanhã a Fenix Foods decidir comprar celulares Motorola, iPhone ou qualquer outro fabricante, <b>o Knox funciona nesses aparelhos porem alguns seguem outras regras</b>. A empresa pode padronizar os celulares modelo Samsung por ja serem a maior parte dos dispositivos dos motorista e interno todos Samsung, apenas alguns sao de outras marca como Motorola. É uma decisão de plataforma de longo prazo, não só de software.</p>
-    </div>
-    <div class="arg-card con">
-      <div class="num">03</div>
-      <span class="arg-tag con">Operacional</span>
-      <h3>Exige alguém de TI para operar e manter</h3>
-      <p>O Knox não se gerencia sozinho. É necessário um profissional de TI que configure perfis, aplique políticas, monitore alertas e responda a incidentes. <b>Se não houver essa pessoa dedicada ou treinada</b>, a ferramenta é subutilizada e o investimento desperdiçado. Isso precisa ser previsto.</p>
-    </div>
-    <div class="arg-card con">
-      <div class="num">04</div>
-      <span class="arg-tag con">Contrato</span>
-      <h3>Proposta com prazo de validade vencido</h3>
-      <p>A proposta do contrato tinha validade até <b>19/11/2025</b>. Já estamos em março de 2026. Embora o fornecedor confirme que os valores seguem válidos, é recomendável obter isso <b>por escrito e com nova assinatura</b> antes de qualquer comprometimento financeiro. Nada verbal em contrato.</p>
-    </div>
-    <div class="arg-card con">
-      <div class="num">05</div>
-      <span class="arg-tag con">Resistência interna</span>
-      <h3>Motoristas podem reagir negativamente ao monitoramento</h3>
-      <p>Monitorar localização e bloquear apps pode gerar atrito com os motoristas se não for comunicado corretamente. <b>Sem uma política interna clara e transparente</b>, a implementação pode criar conflitos trabalhistas ou resistência que prejudique a adesão. A gestão de pessoas precisa ser envolvida antes do rollout.</p>
-    </div>
-    <div class="arg-card con">
-      <div class="num">06</div>
-      <span class="arg-tag con">Estratégico</span>
-      <h3>12 meses de comprometimento sem garantia de resultado</h3>
-      <p>Embora os testes tenham sido positivos, um piloto controlado é diferente de 100 dispositivos em operação real. <b>Problemas de conectividade, integração com sistemas internos ou resistência dos usuários</b> só aparecem em escala. O contrato de 12 meses com renovação automática exige atenção na gestão do aviso de cancelamento se necessário.</p>
-    </div>
+    <div class="arg-card con"><div class="num">01</div><span class="arg-tag con">Risco financeiro</span><h3>O preço está atrelado ao dólar</h3><p>O contrato usa a cotação PTAX de R$ 5,2733 (nov/2025). O dólar hoje está acima disso. Se o câmbio variar mais de <b>10% para cima</b>, o valor mensal será automaticamente revisado para cima. Em cenário de dólar a R$ 6,00+, o custo mensal pode ultrapassar R$ 2.500. Isso precisa estar no orçamento.</p></div>
+    <div class="arg-card con"><div class="num">02</div><span class="arg-tag con">Dependência</span><h3>Melhor desempenho com Samsung — outros fabricantes têm limitações</h3><p>O Knox funciona em outros aparelhos, porém <b>alguns seguem regras diferentes</b>. Como a maior parte dos dispositivos internos e dos motoristas já é Samsung, padronizar na marca é a decisão mais eficiente. Aparelhos Motorola e outros terão cobertura parcial — não total.</p></div>
+    <div class="arg-card con"><div class="num">03</div><span class="arg-tag con">Operacional</span><h3>Exige alguém de TI para operar e manter</h3><p>O Knox não se gerencia sozinho. É necessário um profissional de TI que configure perfis, aplique políticas, monitore alertas e responda a incidentes. <b>Se não houver essa pessoa dedicada ou treinada</b>, a ferramenta é subutilizada e o investimento desperdiçado. Isso precisa ser previsto.</p></div>
+    <div class="arg-card con"><div class="num">04</div><span class="arg-tag con">Contrato</span><h3>Proposta com prazo de validade vencido</h3><p>A proposta tinha validade até <b>19/11/2025</b>. Já estamos em abril de 2026. Embora o fornecedor confirme que os valores seguem válidos, é recomendável obter isso <b>por escrito e com nova assinatura</b> antes de qualquer comprometimento financeiro. Nada verbal em contrato.</p></div>
+    <div class="arg-card con"><div class="num">05</div><span class="arg-tag con">Resistência interna</span><h3>Motoristas podem reagir negativamente ao monitoramento</h3><p>Monitorar localização e bloquear apps pode gerar atrito se não for comunicado corretamente. <b>Sem uma política interna clara e transparente</b>, a implementação pode criar conflitos trabalhistas ou resistência que prejudique a adesão. A gestão de pessoas precisa ser envolvida antes do rollout.</p></div>
+    <div class="arg-card con"><div class="num">06</div><span class="arg-tag con">Estratégico</span><h3>12 meses de comprometimento sem garantia de resultado</h3><p>Embora os testes tenham sido positivos, um piloto controlado é diferente de 100 dispositivos em operação real. <b>Problemas de conectividade, integração com sistemas internos ou resistência dos usuários</b> só aparecem em escala. O contrato de 12 meses com renovação automática exige atenção no aviso de cancelamento se necessário.</p></div>
   </div>
-
-  <div class="verdict" style="border-color: var(--red);">
-    <div class="verdict-icon">⚐</div>
-    <div>
-      <h3 style="color:var(--red)">Avaliação técnica dos contras</h3>
-      <p>Nenhum dos riscos acima é bloqueante — todos são <b>gerenciáveis com planejamento adequado</b>. O risco cambial é o único fora do controle da empresa. Os demais dependem de decisões internas: quem opera a ferramenta, como comunicamos aos motoristas e como monitoramos a renovação do contrato. Um contra que supera todos os outros: <b>o custo de não ter nenhuma solução</b> — frota sem controle, celulares sem proteção e LGPD sem cobertura.</p>
-    </div>
-  </div>
+  <div class="verdict" style="border-color: var(--red);"><div class="verdict-icon">⚐</div><div><h3 style="color:var(--red)">Avaliação técnica dos contras</h3><p>Nenhum dos riscos acima é bloqueante — todos são <b>gerenciáveis com planejamento adequado</b>. O risco cambial é o único fora do controle da empresa. Os demais dependem de decisões internas: quem opera a ferramenta, como comunicamos aos motoristas e como monitoramos a renovação. Um contra que supera todos os outros: <b>o custo de não ter nenhuma solução</b> — frota sem controle, celulares sem proteção e LGPD sem cobertura.</p></div></div>
 </div>
 
 <!-- TAB 3: OPÇÕES -->
 <div class="content" id="tab-opcoes">
   <div class="section-eyebrow">Visão estratégica de TI</div>
   <div class="section-title">Cenários: curto e longo prazo</div>
-  <div class="section-desc">Como TI, apresento quatro caminhos possíveis. Cada um com custo, risco e retorno diferentes. A diretoria escolhe com informação completa.</div>
-
+  <div class="section-desc">Quatro caminhos possíveis. Cada um com custo, risco e retorno diferentes. A diretoria escolhe com informação completa.</div>
   <div class="options-wrap">
     <div class="option-card" style="border-top: 3px solid var(--green);">
-      <div class="option-header">
-        <span class="option-badge" style="color:var(--green)">✦ Curto prazo · Recomendado</span>
-        <h3>Contratar Knox agora — 100 dispositivos</h3>
-        <div class="price">R$ 2.290/mês</div>
-        <span class="rec-badge">Recomendação do TI</span>
-      </div>
+      <div class="option-header"><span class="option-badge" style="color:var(--green)">✦ Curto prazo · Recomendado</span><h3>Contratar Knox agora — 100 dispositivos</h3><div class="price">R$ 2.290/mês</div><span class="rec-badge">Recomendação do TI</span></div>
       <div class="option-body">
-        <div class="option-row"><div class="dot-green"></div><span><b>Implementação imediata</b> — 0 a 60 dias para frota completa operando com controle total</span></div>
+        <div class="option-row"><div class="dot-green"></div><span><b>Implementação imediata</b> — 0 a 60 dias para frota completa com controle total</span></div>
         <div class="option-row"><div class="dot-green"></div><span><b>GPS + bloqueio + histórico de rotas</b> disponíveis no primeiro mês</span></div>
-        <div class="option-row"><div class="dot-green"></div><span>Implementação e KME <b>isentos</b> — economia de R$ 68,70 já garantida</span></div>
-        <div class="option-row"><div class="dot-green"></div><span>Saída sem multa com <b>30 dias de aviso</b> — baixo risco de comprometimento</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Implementação e KME <b>isentos</b> no contrato atual</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Saída sem multa com <b>30 dias de aviso</b></span></div>
         <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span>Exposição cambial: <b>dólar sobe = custo sobe</b> acima de 10% de variação</span></div>
-        <div class="option-row"><div class="dot-red"></div><span>Exige <b>treinamento do time de TI</b> para operar o painel corretamente</span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Exige <b>treinamento do time de TI</b> para operar o painel</span></div>
       </div>
     </div>
-
     <div class="option-card" style="border-top: 3px solid var(--amber);">
-      <div class="option-header">
-        <span class="option-badge" style="color:var(--amber)">Curto prazo · Alternativo</span>
-        <h3>Piloto com 30–50 dispositivos primeiro</h3>
-        <div class="price">~R$ 687–1.145/mês</div>
-        <span class="warn-badge">Menor risco inicial</span>
-      </div>
+      <div class="option-header"><span class="option-badge" style="color:var(--amber)">Curto prazo · Alternativo</span><h3>Piloto com 30–50 dispositivos primeiro</h3><div class="price">~R$ 687–1.145/mês</div><span class="warn-badge">Menor risco inicial</span></div>
       <div class="option-body">
-        <div class="option-row"><div class="dot-green"></div><span>Começa com as <b>rotas mais críticas</b> — motoristas de maior volume ou maior risco</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Começa com as <b>rotas mais críticas</b> — motoristas de maior volume ou risco</span></div>
         <div class="option-row"><div class="dot-green"></div><span><b>Menor comprometimento financeiro</b> para validar operação em escala real</span></div>
         <div class="option-row"><div class="dot-green"></div><span>Tempo para <b>treinar equipe de TI</b> com menor pressão</span></div>
         <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Cobertura parcial</b> — parte da frota permanece sem controle</span></div>
         <div class="option-row"><div class="dot-red"></div><span>Renegociar para 100 devices depois pode ter <b>custo diferente</b></span></div>
-        <div class="option-row"><div class="dot-red"></div><span>Benefícios totais da ferramenta só aparecem <b>com frota completa</b></span></div>
+        <div class="option-row"><div class="dot-red"></div><span>Benefícios totais só aparecem <b>com frota completa</b></span></div>
       </div>
     </div>
-
     <div class="option-card" style="border-top: 3px solid var(--red);">
-      <div class="option-header">
-        <span class="option-badge" style="color:var(--red)">Longo prazo · Alternativo</span>
-        <h3>Substituir Knox por solução multiplataforma</h3>
-        <div class="price">~R$ 3.000–6.000/mês</div>
-        <span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Alto custo · Alta complexidade</span>
-      </div>
+      <div class="option-header"><span class="option-badge" style="color:var(--red)">Longo prazo · Alternativo</span><h3>Substituir Knox por solução multiplataforma</h3><div class="price">~R$ 3.000–6.000/mês</div><span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Alto custo · Alta complexidade</span></div>
       <div class="option-body">
-        <div class="option-row"><div class="dot-green"></div><span>Funciona com <b>qualquer fabricante</b> de celular (Samsung, Motorola, iPhone)</span></div>
+        <div class="option-row"><div class="dot-green"></div><span>Funciona com <b>qualquer fabricante</b> de celular</span></div>
         <div class="option-row"><div class="dot-green"></div><span>Elimina dependência da Samsung para hardware</span></div>
         <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Microsoft Intune ou VMware</b> custam até 3x mais por dispositivo</span></div>
         <div class="option-row"><div class="dot-red"></div><span>Implementação e migração: <b>meses de trabalho</b>, custo elevado</span></div>
-        <div class="option-row"><div class="dot-red"></div><span>Como a frota atual é 100% Samsung, <b>não há ganho imediato</b> nessa troca</span></div>
         <div class="option-row"><div class="dot-red"></div><span>Faz sentido <b>só se a empresa mudar o parque de celulares</b> no futuro</span></div>
       </div>
     </div>
-
     <div class="option-card" style="border-top: 3px solid var(--muted);">
-      <div class="option-header">
-        <span class="option-badge" style="color:var(--muted)">Longo prazo · Não recomendado</span>
-        <h3>Não contratar nenhuma solução</h3>
-        <div class="price">R$ 0/mês agora</div>
-        <span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Risco operacional e legal alto</span>
-      </div>
+      <div class="option-header"><span class="option-badge" style="color:var(--muted)">Longo prazo · Não recomendado</span><h3>Não contratar nenhuma solução</h3><div class="price">R$ 0/mês agora</div><span style="display:inline-block;margin-top:6px;font-size:11px;color:var(--red)">Risco operacional e legal alto</span></div>
       <div class="option-body">
         <div class="option-row"><div class="dot-green"></div><span>Sem custo imediato de software</span></div>
-        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Frota sem rastreamento</b> — operação cega, sem dados de entrega em tempo real</span></div>
-        <div class="option-row"><div class="dot-red"></div><span><b>Celulares da empresa desprotegidos</b> — risco de vazamento de dados de clientes</span></div>
+        <div class="option-row" style="margin-top:10px"><div class="dot-red"></div><span><b>Frota sem rastreamento</b> — operação cega, sem dados em tempo real</span></div>
+        <div class="option-row"><div class="dot-red"></div><span><b>Celulares desprotegidos</b> — risco de vazamento de dados de clientes</span></div>
         <div class="option-row"><div class="dot-red"></div><span><b>Exposição à LGPD</b> — multas de até 2% do faturamento anual por incidente</span></div>
-        <div class="option-row"><div class="dot-red"></div><span>Gestão manual de 100 aparelhos: <b>inviável em escala</b></span></div>
         <div class="option-row"><div class="dot-red"></div><span>Custo de uma única multa LGPD <b>supera 12 meses de Knox</b></span></div>
       </div>
     </div>
   </div>
-
-  <div class="verdict">
-    <div class="verdict-icon">◈</div>
-    <div>
-      <h3>Recomendação estratégica do TI</h3>
-      <p><b>Contratar Knox para os 100 dispositivos agora</b>, com revisão de desempenho em 6 meses. O custo por dispositivo é o menor disponível para o parque Samsung da Fenix Foods, a implementação está isenta, e a saída sem multa com 30 dias de aviso elimina o risco de comprometimento de longo prazo. O piloto reduzido é uma opção válida mas sub-ótima — a ferramenta entrega seu valor máximo com a frota completa. A não-contratação é a única opção tecnicamente inaceitável dado o cenário atual.</p>
-    </div>
-  </div>
+  <div class="verdict"><div class="verdict-icon">◈</div><div><h3>Recomendação estratégica do TI</h3><p><b>Contratar Knox para os 100 dispositivos agora</b>, com revisão de desempenho em 6 meses. O custo por dispositivo é o menor disponível para o parque Samsung da Fenix Foods, a implementação está isenta, e a saída sem multa com 30 dias de aviso elimina o risco de comprometimento de longo prazo. A não-contratação é a única opção tecnicamente inaceitável dado o cenário atual.</p></div></div>
 </div>
 
 <!-- TAB 4: ROI -->
 <div class="content" id="tab-roi">
   <div class="section-eyebrow">Impacto na operação Fenix Foods</div>
   <div class="section-title">O que muda na logística no dia a dia</div>
-  <div class="section-desc">Tradução prática do Knox para as pessoas que mais importam: os gestores de logística e a operação de campo que coordena os motoristas.</div>
-
-  <div class="alert-box">
-    <b>Contexto:</b> A operação da Fenix Foods depende de motoristas que precisam estar acessíveis, rastreáveis e produtivos. Hoje, o controle dessa operação depende de ligações, mensagens manuais e confiança. O Knox automatiza esse controle sem depender de comportamento humano.
-  </div>
-
+  <div class="section-desc">Tradução prática do Knox para os gestores de logística e a operação de campo que coordena os motoristas.</div>
+  <div class="alert-box"><b>Contexto:</b> A operação da Fenix Foods depende de motoristas que precisam estar acessíveis, rastreáveis e produtivos. Hoje, o controle depende de ligações, mensagens manuais e confiança. O Knox automatiza esse controle sem depender de comportamento humano.</div>
   <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Semana 1–2 · Implementação</div>
-      <div class="tl-title">Configuração do painel e carga dos 100 dispositivos</div>
-      <div class="tl-desc">A SmartBiz carrega os aparelhos via KME (Knox Mobile Enrollment) remotamente. <b>Sem recolher os celulares dos motoristas</b>. O TI configura perfis de uso: quais apps ficam liberados, restrições de horário, e ativa o GPS. Implementação isenta pelo contrato.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Mês 1 · Primeiros resultados</div>
-      <div class="tl-title">Logística vê a frota em tempo real pela primeira vez</div>
-      <div class="tl-desc">Os gestores acessam o painel e visualizam <b>onde cada motorista está agora</b>, qual rota percorreu, há quanto tempo está parado. Ligações para localizar motoristas caem drasticamente. Disputas de entrega são resolvidas com histórico de rota.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Mês 2–3 · Otimização</div>
-      <div class="tl-title">Dados de rota começam a revelar ineficiências</div>
-      <div class="tl-desc">Com histórico acumulado, é possível identificar <b>rotas com tempo excessivo</b>, motoristas com paradas fora do previsto, e horários de pico que impactam entregas. Essas informações alimentam decisões de melhoria de rota e escala de equipe.</div>
-    </div>
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-period">Mês 6 · Revisão</div>
-      <div class="tl-title">TI apresenta relatório de uso e ROI à diretoria</div>
-      <div class="tl-desc">Com 6 meses de dados, o TI apresenta: quantos incidentes de celular foram resolvidos remotamente, economia de tempo da logística, e se a solução deve ser expandida, mantida ou renegociada com a SmartBiz.</div>
-    </div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">Semana 1–2 · Implementação</div><div class="tl-title">Configuração do painel e carga dos 100 dispositivos</div><div class="tl-desc">A SmartBiz carrega os aparelhos via KME remotamente. <b>Sem recolher os celulares dos motoristas</b>. O TI configura perfis de uso: apps liberados, restrições de horário e GPS ativo. Implementação isenta pelo contrato.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">Mês 1 · Primeiros resultados</div><div class="tl-title">Logística vê a frota em tempo real pela primeira vez</div><div class="tl-desc">Os gestores visualizam <b>onde cada motorista está agora</b>, qual rota percorreu, há quanto tempo está parado. Ligações para localizar motoristas caem drasticamente. Disputas de entrega resolvidas com histórico de rota.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">Mês 2–3 · Otimização</div><div class="tl-title">Dados de rota começam a revelar ineficiências</div><div class="tl-desc">Com histórico acumulado, é possível identificar <b>rotas com tempo excessivo</b>, paradas fora do previsto e horários de pico. Essas informações alimentam decisões de melhoria de rota e escala de equipe.</div></div>
+    <div class="tl-item"><div class="tl-dot"></div><div class="tl-period">Mês 6 · Revisão</div><div class="tl-title">TI apresenta relatório de uso e ROI à diretoria</div><div class="tl-desc">Com 6 meses de dados, o TI apresenta: incidentes resolvidos remotamente, economia de tempo da logística, e se a solução deve ser expandida, mantida ou renegociada com a SmartBiz.</div></div>
   </div>
-
   <table class="roi-table">
-    <thead>
-      <tr>
-        <th>Situação</th>
-        <th>Sem Knox (hoje)</th>
-        <th>Com Knox</th>
-        <th>Impacto</th>
-      </tr>
-    </thead>
+    <thead><tr><th>Situação</th><th>Sem Knox (hoje)</th><th>Com Knox</th><th>Impacto</th></tr></thead>
     <tbody>
-      <tr>
-        <td>Localizar motorista</td>
-        <td>Ligar, aguardar, registrar manualmente</td>
-        <td>Painel GPS em tempo real, sem ligação</td>
-        <td class="highlight">Economia de tempo diária</td>
-      </tr>
-      <tr>
-        <td>Celular perdido/roubado</td>
-        <td>Dados expostos indefinidamente, substituição sem controle</td>
-        <td>Bloqueio remoto em 30 segundos, dados apagados</td>
-        <td class="highlight">Proteção imediata de dados</td>
-      </tr>
-      <tr>
-        <td>Atualizar app em 100 celulares</td>
-        <td>Recolher aparelhos ou confiar que cada um faça</td>
-        <td>Envio remoto simultâneo pelo painel</td>
-        <td class="highlight">100% de conformidade garantida</td>
-      </tr>
-      <tr>
-        <td>Uso indevido do celular</td>
-        <td>Sem controle — redes sociais, jogos, apps externos</td>
-        <td>Apenas apps autorizados ficam visíveis</td>
-        <td class="highlight">Foco e segurança no uso</td>
-      </tr>
-      <tr>
-        <td>Disputa de entrega</td>
-        <td>Palavra do motorista vs. palavra do cliente</td>
-        <td>Histórico de rota com timestamp comprovado</td>
-        <td class="highlight">Evidência objetiva disponível</td>
-      </tr>
-      <tr>
-        <td>Conformidade LGPD</td>
-        <td>Dispositivos sem proteção de dados = risco legal</td>
-        <td>Criptografia + rastreabilidade + bloqueio remoto</td>
-        <td class="highlight">Cobertura legal documentada</td>
-      </tr>
+      <tr><td>Localizar motorista</td><td>Ligar, aguardar, registrar manualmente</td><td>Painel GPS em tempo real, sem ligação</td><td class="highlight">Economia de tempo diária</td></tr>
+      <tr><td>Celular perdido/roubado</td><td>Dados expostos indefinidamente</td><td>Bloqueio remoto em 30 segundos, dados apagados</td><td class="highlight">Proteção imediata de dados</td></tr>
+      <tr><td>Atualizar app em 100 celulares</td><td>Recolher aparelhos ou confiar que cada um faça</td><td>Envio remoto simultâneo pelo painel</td><td class="highlight">100% de conformidade garantida</td></tr>
+      <tr><td>Uso indevido do celular</td><td>Sem controle — redes sociais, jogos</td><td>Apenas apps autorizados ficam visíveis</td><td class="highlight">Foco e segurança no uso</td></tr>
+      <tr><td>Disputa de entrega</td><td>Palavra do motorista vs. palavra do cliente</td><td>Histórico de rota com timestamp comprovado</td><td class="highlight">Evidência objetiva disponível</td></tr>
+      <tr><td>Conformidade LGPD</td><td>Dispositivos sem proteção = risco legal</td><td>Criptografia + rastreabilidade + bloqueio remoto</td><td class="highlight">Cobertura legal documentada</td></tr>
     </tbody>
   </table>
-
-  <div class="verdict">
-    <div class="verdict-icon">◆</div>
-    <div>
-      <h3>Conclusão executiva</h3>
-      <p>O Knox resolve um problema que a Fenix Foods já tem hoje — só que de forma invisível: falta de controle sobre a frota de campo. <b>R$ 22,90 por motorista por mês</b> é o custo de ter visibilidade total, proteção do patrimônio e cobertura legal. O retorno não é especulativo — é operacional, e começa no primeiro mês de uso. A recomendação do TI é clara: <b>aprovar o contrato, monitorar o câmbio, e revisar em 6 meses.</b></p>
-    </div>
-  </div>
+  <div class="verdict"><div class="verdict-icon">◆</div><div><h3>Conclusão executiva</h3><p>O Knox resolve um problema que a Fenix Foods já tem hoje — falta de controle sobre a frota de campo. <b>R$ 22,90 por motorista por mês</b> é o custo de visibilidade total, proteção do patrimônio e cobertura legal. O retorno começa no primeiro mês. A recomendação do TI é clara: <b>aprovar o contrato, monitorar o câmbio, e revisar em 6 meses.</b></p></div></div>
 </div>
 
-<!-- FOOTER COM BOTÃO DE DECISÃO -->
 <div class="doc-footer">
-  <div class="footer-info">
-    <span>Fenix Foods · Departamento de TI · Análise Técnica Executiva · <b>Confidencial</b></span>
-    <span>Contrato SMBZ187-2025 · SmartBiz / Samsung Knox · Março 2026</span>
-  </div>
-
-  <div class="decision-wrap" id="decisionWrap">
-    <div class="decision-label">Decisão da diretoria</div>
-    <div class="decision-ring" id="decisionBtn" onclick="toggleDecision()">
-      <svg viewBox="0 0 120 120">
-        <circle class="bg" cx="60" cy="60" r="54"/>
-        <circle class="arc" id="decisionArc" cx="60" cy="60" r="54"/>
-      </svg>
-      <div class="decision-inner">
-        <div class="decision-ico" id="decisionIco">◈</div>
-        <div class="decision-lbl" id="decisionLbl">Pendente</div>
-      </div>
-    </div>
-    <div class="decision-pill" id="decisionPill">
-      <div class="decision-dot" id="decisionDot"></div>
-      <span id="decisionPillText">Aguardando aprovação</span>
-    </div>
-  </div>
+  <span>Fenix Foods · Departamento de TI · Análise Técnica Executiva · <b>Confidencial</b></span>
+  <span>Contrato SMBZ187-2025 · SmartBiz / Samsung Knox · Abril 2026</span>
 </div>
 
 <script>
-  function showTab(id) {
+  function showTab(id, el) {
     document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.getElementById('tab-' + id).classList.add('active');
-    event.target.classList.add('active');
+    el.classList.add('active');
   }
 
   var decisionState = 0;
   var states = [
-    { cls: '',               ico: '◈', lbl: 'Pendente',  pill: 'Aguardando aprovação',   headerColor: 'var(--amber)',  headerText: 'Aguardando aprovação diretoria' },
-    { cls: 'state-approved', ico: '✦', lbl: 'Aprovado',  pill: 'Contrato aprovado',       headerColor: 'var(--green)',  headerText: 'Aprovado pela diretoria' },
-    { cls: 'state-rejected', ico: '✕', lbl: 'Reprovado', pill: 'Contrato reprovado',      headerColor: 'var(--red)',    headerText: 'Reprovado pela diretoria' }
+    { cls: '',               ico: '◈', lbl: 'Pendente',  pill: 'Aguardando aprovação',  headerColor: 'var(--amber)', headerText: 'Aguardando aprovação diretoria' },
+    { cls: 'state-approved', ico: '✦', lbl: 'Aprovado',  pill: 'Contrato aprovado',      headerColor: 'var(--green)', headerText: 'Aprovado pela diretoria' },
+    { cls: 'state-rejected', ico: '✕', lbl: 'Reprovado', pill: 'Contrato reprovado',     headerColor: 'var(--red)',   headerText: 'Reprovado pela diretoria' }
   ];
 
   function toggleDecision() {
     decisionState = (decisionState + 1) % 3;
     var s = states[decisionState];
-    var wrap = document.getElementById('decisionWrap');
-    var btn  = document.getElementById('decisionBtn');
-
-    wrap.className = 'decision-wrap ' + s.cls;
-    btn.className  = 'decision-ring ' + s.cls;
-
+    document.getElementById('decisionWrap').className = 'decision-wrap ' + s.cls;
+    document.getElementById('decisionBtn').className  = 'decision-ring ' + s.cls;
     document.getElementById('decisionIco').textContent      = s.ico;
     document.getElementById('decisionLbl').textContent      = s.lbl;
     document.getElementById('decisionPillText').textContent = s.pill;
-
     var hs = document.getElementById('header-status');
     hs.style.color = s.headerColor;
     hs.textContent = s.headerText;
